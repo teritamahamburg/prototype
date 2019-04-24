@@ -29,7 +29,7 @@
         </template>
       </v-data-table>
     </div>
-    <div v-else-if="items.length > 0 && showItems">
+    <div v-else-if="items.length > 0 && showItems" class="cards">
       <v-card v-for="(item, index) in items" :key="index" max-width="350" class="card">
         <v-img :src="item.src" height="150px" contain v-if="item.src && item.src.length > 0">
           <v-layout fill-height align-end>
@@ -89,13 +89,17 @@
       <v-icon>add</v-icon>
     </v-btn>
 
-    <v-dialog v-model="addDialog.open">
+    <v-dialog v-model="addDialog.open" :fullscreen="$vuetify.breakpoint.xsOnly" :maxWidth="350">
       <v-card>
         <v-card-title>
           <div class="title">Add</div>
         </v-card-title>
 
         <v-card-text>
+          <v-btn outline block style="margin-bottom: 16px">
+            <v-icon left>camera</v-icon>
+            カメラでラベルを読み取る
+          </v-btn>
           <v-layout align-end justify-center>
             <v-avatar size="85" tile>
               <img src="" alt="avatar" />
@@ -201,7 +205,13 @@ export default {
     padding-bottom: 72px; /* FBAボタン分 */
   }
 
-  .card {
-    margin: 8px;
+  .cards {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 300px);
+    column-gap: 8px;
+    row-gap: 8px;
+    justify-content: center;
+    align-items: start;
   }
 </style>

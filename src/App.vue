@@ -49,7 +49,7 @@ export default {
     };
   },
   mounted() {
-    if (!window.updatefound) {
+    if (window.updatefound) {
       window.updatefound.then((updated) => {
         this.refresh = updated;
       });
