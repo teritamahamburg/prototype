@@ -3,6 +3,8 @@
 import { register } from 'register-service-worker';
 
 if (process.env.NODE_ENV === 'production') {
+  let updateFoundResolve;
+  window.updatefound = new Promise((resolve) => { updateFoundResolve = resolve });
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready() {
       console.log(
@@ -21,6 +23,7 @@ if (process.env.NODE_ENV === 'production') {
     },
     updated() {
       console.log('New content is available; please refresh.');
+      updateFoundResolve(true);
     },
     offline() {
       console.log('No internet connection found. App is running in offline mode.');
