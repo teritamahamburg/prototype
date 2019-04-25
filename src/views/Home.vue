@@ -73,8 +73,12 @@
 
         <v-card-actions>
           <v-spacer />
+          <v-btn outline @click="showHistory(index)" v-if="item.histories">
+            <v-icon left>history</v-icon>
+            History
+          </v-btn>
           <v-btn outline @click="removeItem(index)">
-            <v-icon>delete</v-icon>
+            <v-icon left>delete</v-icon>
             Remove
           </v-btn>
         </v-card-actions>
@@ -122,6 +126,32 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="historyDialog.open" max-width="590">
+      <v-card>
+        <v-card-title>Histories</v-card-title>
+      </v-card>
+
+      <v-list>
+        <v-list-group no-action v-for="(history, index) in historyDialog.histories" :key="index">
+          <template v-slot:activator>
+            <v-list-tile>
+              <v-list-tile-title>{{history.who}}</v-list-tile-title>
+              <v-list-tile-sub-title>{{history.changedAt}}</v-list-tile-sub-title>
+            </v-list-tile>
+          </template>
+          <v-list-tile v-for="(key) in Object.keys(history.changed)" :key="key">
+            <v-list-tile-title>{{key}}</v-list-tile-title>
+            <v-list-tile-sub-title>
+              {{history.changed[key][0]}} ->
+            </v-list-tile-sub-title>
+            <v-list-tile-title>
+              {{history.changed[key][1]}}
+            </v-list-tile-title>
+          </v-list-tile>
+        </v-list-group>
+      </v-list>
+    </v-dialog>
   </div>
 </template>
 
@@ -153,6 +183,24 @@ export default {
           buyer: '山田 花子',
           checkedAt: '2018/12/30',
           place: '306',
+
+          histories: [
+            {
+              who: '京王 太郎',
+              changed: {
+                name: ['PC', 'Mac book'],
+              },
+              changedAt: '2017/99/99',
+            },
+            {
+              who: '去塩 高光',
+              changed: {
+                number: ['1234', '98EF 8'],
+                belongs: ['情報工学科', '基礎教育科'],
+              },
+              changedAt: '2017/99/99',
+            },
+          ],
         },
       ],
       addDialog: {
@@ -167,6 +215,10 @@ export default {
           checkedAt: '',
           place: '',
         },
+      },
+      historyDialog: {
+        open: false,
+        histories: [],
       },
     };
   },
@@ -193,6 +245,10 @@ export default {
     },
     removeItem(index) {
       this.items.splice(index, 1);
+    },
+    showHistory(index) {
+      this.historyDialog.histories = this.items[index].histories;
+      this.historyDialog.open = true;
     },
   },
 };
